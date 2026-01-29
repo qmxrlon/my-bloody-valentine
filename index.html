@@ -2,6 +2,8 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Valentinstag 💘</title>
 
 <style>
@@ -9,104 +11,97 @@ body {
   font-family: Arial, sans-serif;
   background: radial-gradient(circle, #ffe0f0, #ffb6d5);
   text-align: center;
-  padding: 40px;
+  padding: 20px;
   overflow-x: hidden;
 }
 
 .card {
   background: white;
-  border-radius: 25px;
-  padding: 35px;
-  max-width: 460px;
+  border-radius: 22px;
+  padding: 25px;
+  max-width: 420px;
+  width: 95%;
   margin: auto;
-  box-shadow: 0 0 25px rgba(0,0,0,0.25);
-  position: relative;
-  z-index: 10;
+  box-shadow: 0 0 20px rgba(0,0,0,0.25);
 }
 
-h1 { color:#e60073; }
+h1 {
+  color:#e60073;
+  font-size: 1.6rem;
+}
 
 input {
-  padding:12px;
-  width:80%;
-  border-radius:12px;
-  border:1px solid #ccc;
-  margin-bottom:20px;
+  padding: 12px;
+  width: 90%;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 16px;
 }
 
 button {
-  padding:12px 26px;
-  font-size:18px;
-  border:none;
-  border-radius:15px;
-  cursor:pointer;
-  margin:10px;
+  padding: 12px 22px;
+  font-size: 17px;
+  border-radius: 14px;
+  margin: 8px;
 }
 
 .yes { background:#ff4da6; color:white; }
 .no { background:lightgray; position:relative; }
 
 .cats img {
-  width:140px;
-  margin:10px;
-  border-radius:15px;
+  width: 110px;
+  margin: 6px;
+  border-radius: 14px;
 }
 
-#happyCat { display:none; margin-top:20px; }
+#happyCat { display:none; width:200px; margin-top:15px; }
 
-#result { min-height:80px; }
+#result { margin-top:15px; min-height:90px; }
 
-.confetti, .heart {
-  position:fixed;
-  width:14px;
-  height:14px;
-  background:pink;
+#screenshotBtn {
+  display:none;
+  margin-top:12px;
+  background:#ff7abf;
+}
+
+/* Falling hearts */
+.heartRain {
+  position: fixed;
+  top: -20px;
+  width: 18px;
+  height: 18px;
+  background: #ff4da6;
   transform: rotate(45deg);
-  top:100vh;
-  z-index:5;
+  animation: fall linear forwards;
+  z-index: 1;
 }
 
-.heart::before,
-.heart::after {
+.heartRain::before,
+.heartRain::after {
   content:"";
-  width:14px;
-  height:14px;
-  background:pink;
+  width:18px;
+  height:18px;
+  background:#ff4da6;
   position:absolute;
   border-radius:50%;
 }
-.heart::before { top:-7px; left:0; }
-.heart::after { left:-7px; top:0; }
+.heartRain::before { top:-9px; left:0; }
+.heartRain::after { left:-9px; top:0; }
 
-.firework {
-  position:fixed;
-  width:8px;
-  height:8px;
-  background:gold;
-  border-radius:50%;
-  animation: explode 1s forwards;
-}
-
-@keyframes explode {
+@keyframes fall {
   to {
-    transform: translate(var(--x), var(--y)) scale(0);
+    transform: translateY(110vh) rotate(45deg);
     opacity:0;
   }
 }
 
-/* Typing Cursor */
-.cursor {
-  display:inline-block;
-  animation: blink 1s infinite;
+/* glow effect */
+body.loveMode {
+  animation: glow 2s infinite alternate;
 }
-@keyframes blink {
-  50% { opacity:0; }
-}
-
-#screenshotBtn {
-  display:none;
-  margin-top:15px;
-  background:#ff7abf;
+@keyframes glow {
+  from { background:#ffd6eb; }
+  to { background:#ffb6d5; }
 }
 </style>
 </head>
@@ -120,107 +115,78 @@ button {
 <input id="nameInput" placeholder="Dein Name..." />
 
 <div>
-  <button class="yes" onclick="sayYes()">Jaaaa 💕</button>
-  <button class="no" id="noBtn">Nein 😏(nuh uh)</button>
+  <button class="yes" onclick="sayYes()">Ja 💕</button>
+  <button class="no" id="noBtn">Nein (nuh uh)😏</button>
 </div>
 
 <div id="result"></div>
 
 <button id="screenshotBtn" onclick="takeShot()">📸 Screenshot machen</button>
 
-<img id="happyCat" src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" width="220">
+<img id="happyCat" src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif">
 
 <div class="cats">
   <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
   <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
-  <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
+  <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif">
 </div>
 
 </div>
 
 <!-- Sounds -->
-<audio id="music" loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/10/03/audio_4c8c9c1e91.mp3">
+<audio id="music" preload="auto" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/03/audio_4c8c9c1e91.mp3">
 </audio>
 
-<audio id="fireSound">
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_52a5f8bda7.mp3">
+<audio id="fireSound" preload="auto">
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_52a5f8bda7.mp3">
 </audio>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
 const noBtn = document.getElementById("noBtn");
 
 noBtn.addEventListener("mouseover", () => {
-  const x = Math.random()*240 -120;
-  const y = Math.random()*240 -120;
+  const x = Math.random()*200 -100;
+  const y = Math.random()*200 -100;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+});
+
+// also on touch devices:
+noBtn.addEventListener("touchstart", () => {
+  const x = Math.random()*200 -100;
+  const y = Math.random()*200 -100;
   noBtn.style.transform = `translate(${x}px, ${y}px)`;
 });
 
 function sayYes() {
   const name = document.getElementById("nameInput").value || "Du";
 
-  document.getElementById("music").play();
-  document.getElementById("fireSound").play();
+  document.body.classList.add("loveMode");
 
-  typeText(`💘 Dankeschön ${name}! Ich freue mich so sehrrr 🥰 und ich liebe dich über alles 💖🐱`);
+  document.getElementById("music").play().catch(()=>{});
+  document.getElementById("fireSound").play().catch(()=>{});
+
+  document.getElementById("result").innerHTML =
+   `<h2>💘 Dankeschön ${name}!</h2>
+    <p>Ich freue mich riesig 🥰 und ich liebe dich über alles mwuah 💖🐱</p>`;
 
   document.getElementById("happyCat").style.display="block";
   document.getElementById("screenshotBtn").style.display="inline-block";
 
-  heartsFly();
-  fireworks();
+  startHeartRain();
 }
 
-function typeText(text) {
-  const box = document.getElementById("result");
-  box.innerHTML = "";
-  let i=0;
-  const span = document.createElement("span");
-  const cursor = document.createElement("span");
-  cursor.className="cursor";
-  cursor.innerText="|";
-  box.append(span,cursor);
-
-  const interval = setInterval(()=>{
-    span.innerText += text[i];
-    i++;
-    if(i>=text.length){
-      clearInterval(interval);
-      cursor.remove();
-    }
-  },45);
-}
-
-function heartsFly(){
-  for(let i=0;i<35;i++){
+function startHeartRain(){
+  setInterval(()=>{
     const h=document.createElement("div");
-    h.className="heart";
+    h.className="heartRain";
     h.style.left=Math.random()*100+"vw";
+    h.style.animationDuration=(Math.random()*2+3)+"s";
     document.body.appendChild(h);
-
-    const y=-Math.random()*120-60;
-    const x=Math.random()*200-100;
-
-    h.animate([
-      {transform:"translateY(0) scale(1)"},
-      {transform:`translate(${x}px, ${y}px) scale(1.5)`}
-    ],{duration:1800});
-
-    setTimeout(()=>h.remove(),2000);
-  }
-}
-
-function fireworks(){
-  for(let i=0;i<25;i++){
-    const f=document.createElement("div");
-    f.className="firework";
-    f.style.left="50vw";
-    f.style.top="50vh";
-    f.style.setProperty("--x",(Math.random()*400-200)+"px");
-    f.style.setProperty("--y",(Math.random()*400-200)+"px");
-    document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1000);
-  }
+    setTimeout(()=>h.remove(),5000);
+  },300);
 }
 
 function takeShot(){
@@ -232,8 +198,6 @@ function takeShot(){
   });
 }
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 </body>
 </html>
