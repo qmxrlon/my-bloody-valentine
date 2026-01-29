@@ -25,55 +25,61 @@ body {
   box-shadow: 0 0 20px rgba(0,0,0,0.25);
 }
 
-h1 {
-  color:#e60073;
-  font-size: 1.6rem;
-}
+h1 { color:#e60073; font-size:1.6rem; }
 
 input {
-  padding: 12px;
-  width: 90%;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+  padding:12px;
+  width:90%;
+  border-radius:12px;
+  border:1px solid #ccc;
+  font-size:16px;
 }
 
 button {
-  padding: 12px 22px;
-  font-size: 17px;
-  border-radius: 14px;
-  margin: 8px;
+  padding:12px 22px;
+  font-size:17px;
+  border-radius:14px;
+  margin:8px;
+  cursor:pointer;
 }
 
 .yes { background:#ff4da6; color:white; }
 .no { background:lightgray; position:relative; }
 
+#enableSoundBtn {
+  background:#ff9ad5;
+  border:none;
+}
+
+#screenshotBtn, #shareBtn { display:none; background:#ff7abf; }
+
 .cats img {
-  width: 110px;
-  margin: 6px;
-  border-radius: 14px;
+  width:110px;
+  margin:6px;
+  border-radius:14px;
 }
 
 #happyCat { display:none; width:200px; margin-top:15px; }
 
-#result { margin-top:15px; min-height:90px; }
-
-#screenshotBtn {
+#contract {
   display:none;
-  margin-top:12px;
-  background:#ff7abf;
+  margin-top:15px;
+  background:#fff0f6;
+  padding:15px;
+  border-radius:15px;
+  border:2px dashed #ff4da6;
 }
 
 /* Falling hearts */
 .heartRain {
-  position: fixed;
-  top: -20px;
-  width: 18px;
-  height: 18px;
-  background: #ff4da6;
-  transform: rotate(45deg);
-  animation: fall linear forwards;
-  z-index: 1;
+  position:fixed;
+  top:-20px;
+  width:18px;
+  height:18px;
+  background:#ff4da6;
+  transform:rotate(45deg);
+  animation:fall linear forwards;
+  z-index:1;
 }
 
 .heartRain::before,
@@ -89,19 +95,23 @@ button {
 .heartRain::after { left:-9px; top:0; }
 
 @keyframes fall {
-  to {
-    transform: translateY(110vh) rotate(45deg);
-    opacity:0;
-  }
+  to { transform:translateY(110vh) rotate(45deg); opacity:0; }
 }
 
-/* glow effect */
-body.loveMode {
-  animation: glow 2s infinite alternate;
-}
+body.loveMode { animation:glow 2s infinite alternate; }
+
 @keyframes glow {
   from { background:#ffd6eb; }
   to { background:#ffb6d5; }
+}
+
+/* speech bubble */
+#catSpeech {
+  display:none;
+  background:white;
+  padding:8px 14px;
+  border-radius:15px;
+  margin-top:8px;
 }
 </style>
 </head>
@@ -110,20 +120,26 @@ body.loveMode {
 
 <div class="card">
 
+<button id="enableSoundBtn">🔊 Sound aktivieren</button>
+
 <h1>💖 Möchtest du mein Valentinstag Date sein? 💖</h1>
 
 <input id="nameInput" placeholder="Dein Name..." />
 
 <div>
   <button class="yes" onclick="sayYes()">Ja 💕</button>
-  <button class="no" id="noBtn">Nein (nuh uh)😏</button>
+  <button class="no" id="noBtn">Nein (nuh uh) 😏</button>
 </div>
 
 <div id="result"></div>
 
-<button id="screenshotBtn" onclick="takeShot()">📸 Screenshot machen</button>
+<div id="contract"></div>
+
+<button id="screenshotBtn" onclick="takeShot()">📸 Screenshot</button>
+<button id="shareBtn" onclick="sharePage()">📤 Teilen</button>
 
 <img id="happyCat" src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif">
+<div id="catSpeech">Miau 😻 beste Entscheidung!</div>
 
 <div class="cats">
   <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
@@ -133,7 +149,6 @@ body.loveMode {
 
 </div>
 
-<!-- Sounds -->
 <audio id="music" preload="auto" loop>
   <source src="https://cdn.pixabay.com/download/audio/2022/10/03/audio_4c8c9c1e91.mp3">
 </audio>
@@ -145,37 +160,73 @@ body.loveMode {
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
-const noBtn = document.getElementById("noBtn");
+const noBtn=document.getElementById("noBtn");
+const music=document.getElementById("music");
+const fireSound=document.getElementById("fireSound");
+const enableBtn=document.getElementById("enableSoundBtn");
 
-noBtn.addEventListener("mouseover", () => {
-  const x = Math.random()*200 -100;
-  const y = Math.random()*200 -100;
-  noBtn.style.transform = `translate(${x}px, ${y}px)`;
-});
+let soundEnabled=false;
 
-// also on touch devices:
-noBtn.addEventListener("touchstart", () => {
-  const x = Math.random()*200 -100;
-  const y = Math.random()*200 -100;
-  noBtn.style.transform = `translate(${x}px, ${y}px)`;
-});
+enableBtn.onclick=()=>{
+  music.play().then(()=>{
+    music.pause();
+    music.currentTime=0;
+    soundEnabled=true;
+    enableBtn.innerText="🔊 Sound aktiviert 💕";
+  });
+};
 
-function sayYes() {
-  const name = document.getElementById("nameInput").value || "Du";
+noBtn.addEventListener("mouseover",jumpNo);
+noBtn.addEventListener("touchstart",jumpNo);
+
+function jumpNo(){
+  const x=Math.random()*200-100;
+  const y=Math.random()*200-100;
+  noBtn.style.transform=`translate(${x}px,${y}px)`;
+}
+
+function sayYes(){
+  const name=new URLSearchParams(window.location.search).get("name") ||
+        document.getElementById("nameInput").value || "Du";
 
   document.body.classList.add("loveMode");
 
-  document.getElementById("music").play().catch(()=>{});
-  document.getElementById("fireSound").play().catch(()=>{});
+  if(soundEnabled){
+    music.play();
+    fireSound.play();
+  }
 
-  document.getElementById("result").innerHTML =
+  navigator.vibrate?.(300);
+
+  document.getElementById("result").innerHTML=
    `<h2>💘 Dankeschön ${name}!</h2>
     <p>Ich freue mich riesig 🥰 und ich liebe dich über alles mwuah 💖🐱</p>`;
 
   document.getElementById("happyCat").style.display="block";
-  document.getElementById("screenshotBtn").style.display="inline-block";
+  document.getElementById("catSpeech").style.display="block";
 
+  document.getElementById("contract").style.display="block";
+  document.getElementById("contract").innerHTML=
+   `<h3>📜 Valentinstags-Vertrag</h3>
+    <p>${name} & ❤️ DU</p>
+    <p>Datum: ${new Date().toLocaleDateString()}</p>`;
+
+  document.getElementById("screenshotBtn").style.display="inline-block";
+  document.getElementById("shareBtn").style.display="inline-block";
+
+  burstHearts();
   startHeartRain();
+  fireworks();
+}
+
+function burstHearts(){
+  for(let i=0;i<25;i++){
+    const h=document.createElement("div");
+    h.className="heartRain";
+    h.style.left="50vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),3000);
+  }
 }
 
 function startHeartRain(){
@@ -186,7 +237,23 @@ function startHeartRain(){
     h.style.animationDuration=(Math.random()*2+3)+"s";
     document.body.appendChild(h);
     setTimeout(()=>h.remove(),5000);
-  },300);
+  },400);
+}
+
+function fireworks(){
+  for(let i=0;i<18;i++){
+    const f=document.createElement("div");
+    f.style.position="fixed";
+    f.style.left="50vw";
+    f.style.top="40vh";
+    f.style.width="6px";
+    f.style.height="6px";
+    f.style.background="gold";
+    f.style.borderRadius="50%";
+    f.style.transform=`translate(${Math.random()*300-150}px,${Math.random()*300-150}px)`;
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1000);
+  }
 }
 
 function takeShot(){
@@ -196,6 +263,22 @@ function takeShot(){
     a.download="valentine.png";
     a.click();
   });
+}
+
+function sharePage(){
+  if(navigator.share){
+    navigator.share({
+      title:"Valentinstag 💘",
+      url:window.location.href
+    });
+  }
+}
+</script>
+
+<script>
+const params=new URLSearchParams(window.location.search);
+if(params.get("name")){
+  document.getElementById("nameInput").value=params.get("name");
 }
 </script>
 
