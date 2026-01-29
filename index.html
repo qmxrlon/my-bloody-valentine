@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Valentinstag 💘</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: pink;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      color: #e60073;
+    }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .yes {
+      background: #ff4da6;
+      color: white;
+    }
+
+    .no {
+      background: lightgray;
+    }
+
+    .gif {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>💖 Willst du mein Valentin sein? 💖</h1>
+
+  <p>Trag deinen Namen ein:</p>
+  <input id="nameInput" placeholder="Dein Name...">
+
+  <div>
+    <button class="yes" onclick="sayYes()">Ja 💕</button>
+    <button class="no" onclick="sayNo()">Nein 😭</button>
+  </div>
+
+  <div id="result"></div>
+
+  <div class="gif">
+    <!-- Hier kannst du später Katzen-GIFs reinmachen -->
+    <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="200">
+  </div>
+</div>
+
+<script>
+  function sayYes() {
+    const name = document.getElementById("nameInput").value || "Du";
+    document.getElementById("result").innerHTML =
+      `<h2>🎉 ${name}, yay!! Date accepted!!! 💘🐱</h2>`;
+  }
+
+  function sayNo() {
+    const name = document.getElementById("nameInput").value || "Du";
+    document.getElementById("result").innerHTML =
+      `<h2>😭 ${name}... ich bin am Boden zerstört... 💔</h2>`;
+  }
+</script>
+
+</body>
+</html>
