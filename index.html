@@ -1,93 +1,155 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Valentinstag 💘</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: pink;
-      text-align: center;
-      padding: 40px;
-    }
+<meta charset="UTF-8" />
+<title>Valentinstag 💘</title>
 
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(#ffd6e8, #ffc0cb);
+  text-align: center;
+  padding: 40px;
+}
 
-    h1 {
-      color: #e60073;
-    }
+.card {
+  background: white;
+  border-radius: 25px;
+  padding: 35px;
+  max-width: 450px;
+  margin: auto;
+  box-shadow: 0 0 25px rgba(0,0,0,0.25);
+}
 
-    input {
-      padding: 10px;
-      width: 80%;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      margin-bottom: 20px;
-    }
+h1 {
+  color: #e60073;
+}
 
-    button {
-      padding: 12px 25px;
-      font-size: 18px;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      margin: 10px;
-    }
+input {
+  padding: 12px;
+  width: 80%;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
 
-    .yes {
-      background: #ff4da6;
-      color: white;
-    }
+button {
+  padding: 12px 26px;
+  font-size: 18px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  margin: 10px;
+}
 
-    .no {
-      background: lightgray;
-    }
+.yes {
+  background: #ff4da6;
+  color: white;
+}
 
-    .gif {
-      margin-top: 20px;
-    }
-  </style>
+.no {
+  background: lightgray;
+  position: relative;
+}
+
+.cats img {
+  width: 140px;
+  margin: 10px;
+  border-radius: 15px;
+}
+
+#result {
+  margin-top: 20px;
+}
+
+#happyCat {
+  display: none;
+  margin-top: 20px;
+}
+
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: pink;
+  animation: fall 3s linear infinite;
+  top: -10px;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+</style>
 </head>
+
 <body>
 
 <div class="card">
-  <h1>💖 Willst du mein Valentin sein? 💖</h1>
 
-  <p>Trag deinen Namen ein:</p>
-  <input id="nameInput" placeholder="Dein Name...">
+<h1>💖 Möchtest du mein Valentinstag-Date sein? 💖</h1>
 
-  <div>
-    <button class="yes" onclick="sayYes()">Ja 💕</button>
-    <button class="no" onclick="sayNo()">Nein 😭</button>
-  </div>
+<p>Schreib deinen Namen rein:</p>
+<input id="nameInput" placeholder="Dein Name..." />
 
-  <div id="result"></div>
-
-  <div class="gif">
-    <!-- Hier kannst du später Katzen-GIFs reinmachen -->
-    <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="200">
-  </div>
+<div>
+  <button class="yes" onclick="sayYes()">Ja 💕</button>
+  <button class="no" id="noBtn">Nein 😏</button>
 </div>
 
-<script>
-  function sayYes() {
-    const name = document.getElementById("nameInput").value || "Du";
-    document.getElementById("result").innerHTML =
-      `<h2>🎉 ${name}, yay!! Date accepted!!! 💘🐱</h2>`;
-  }
+<div id="result"></div>
 
-  function sayNo() {
-    const name = document.getElementById("nameInput").value || "Du";
-    document.getElementById("result").innerHTML =
-      `<h2>😭 ${name}... ich bin am Boden zerstört... 💔</h2>`;
+<img id="happyCat" src="https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif" width="220">
+
+<div class="cats">
+  <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
+  <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
+  <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif">
+</div>
+
+</div>
+
+<!-- MUSIK -->
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/03/audio_4c8c9c1e91.mp3">
+</audio>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+
+noBtn.addEventListener("mouseover", () => {
+  const x = Math.random() * 200 - 100;
+  const y = Math.random() * 200 - 100;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+});
+
+function sayYes() {
+  const name = document.getElementById("nameInput").value || "Du";
+
+  document.getElementById("result").innerHTML = `
+    <h2>💘 Dankeschön ${name}!!!</h2>
+    <p>Ich freue mich riesig 🥰 und ich liebe dich über alles 💖🐱</p>
+  `;
+
+  document.getElementById("happyCat").style.display = "block";
+  document.getElementById("music").play();
+
+  launchConfetti();
+}
+
+function launchConfetti() {
+  for (let i = 0; i < 60; i++) {
+    const conf = document.createElement("div");
+    conf.className = "confetti";
+    conf.style.left = Math.random() * 100 + "vw";
+    conf.style.animationDuration = Math.random() * 2 + 2 + "s";
+    document.body.appendChild(conf);
+
+    setTimeout(() => conf.remove(), 4000);
   }
+}
 </script>
 
 </body>
